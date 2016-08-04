@@ -37,6 +37,7 @@ class SecondViewController: UIViewController, FBSDKLoginButtonDelegate {
                     return
                 }
                 
+                let id = user?["id"] as? String
                 let email = user?["email"] as? String
                 let firstName = user?["first_name"] as? String
                 let lastName = user?["last_name"] as? String
@@ -62,7 +63,7 @@ class SecondViewController: UIViewController, FBSDKLoginButtonDelegate {
                     
                 }).resume()
                 
-                //print("\(firstName!) \(lastName!), \(email), \(pictureUrl)")
+                print("id: \(id)")
                 if(firstName != nil && lastName != nil)
                 {
                     self.username.text = "\(firstName!) \(lastName!)"

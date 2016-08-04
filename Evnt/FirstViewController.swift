@@ -51,8 +51,8 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             annotationView!.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
             
             // Set the annotation view’s background color to a value determined by its longitude.
-            let hue = CGFloat(annotation.coordinate.longitude) / 100
-            annotationView!.backgroundColor = UIColor(hue: hue, saturation: 0.5, brightness: 1, alpha: 1)
+            let hue = CGFloat(annotation.coordinate.longitude) / 10
+            annotationView!.backgroundColor = UIColor.blue() //UIColor(hue: hue, saturation: 0.5, brightness: 1, alpha: 1)
         }
         
         return annotationView
@@ -63,6 +63,12 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     func longPressAction(_ lpg: UILongPressGestureRecognizer) {
     
         if lpg.state == .began {
+            
+            //present Event View
+            let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc: UINavigationController = storyboard.instantiateViewController(withIdentifier: "EventViewController") as! UINavigationController
+            self.present(vc, animated:true, completion:nil)
+            
             let CGPoint = lpg.location(in: mapView)
             let mapPoint = mapView.convert(CGPoint, toCoordinateFrom: mapView)
             

@@ -16,7 +16,7 @@ class SecondViewController: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var profilePicture: UIImageView!
     @IBOutlet weak var loginButton: FBSDKLoginButton! = {
         let button = FBSDKLoginButton()
-        button.readPermissions = ["email"]
+        //button.readPermissions = ["email", "public_profile", "user_friends"]
         return button
     }()
     
@@ -29,7 +29,7 @@ class SecondViewController: UIViewController, FBSDKLoginButtonDelegate {
 
     func fetchProfile() {
         if FBSDKAccessToken.current() != nil {
-            let parameters = ["fields": "email, first_name, last_name, picture.type(large)"]
+            let parameters = ["fields": "id, email, first_name, last_name, picture.type(large)"]
             FBSDKGraphRequest(graphPath: "me", parameters: parameters).start(completionHandler: { (connection, user, requestError) -> Void in
                 
                 if requestError != nil {
@@ -62,11 +62,44 @@ class SecondViewController: UIViewController, FBSDKLoginButtonDelegate {
                     
                 }).resume()
                 
-                print("\(firstName!) \(lastName!), \(email), \(pictureUrl)")
-                self.username.text = "\(firstName!) \(lastName!)"
-                self.caption.text = "\(email!)"
+                //print("\(firstName!) \(lastName!), \(email), \(pictureUrl)")
+                if(firstName != nil && lastName != nil)
+                {
+                    self.username.text = "\(firstName!) \(lastName!)"
+                }
+                if(email != nil)
+                {
+                    self.caption.text = "\(email!)"
+                }
+                self.showFriends()
             })
         }
+    }
+    
+    struct Friend {
+        var id, name, picture: String?
+    }
+    
+    func showFriends() {
+        FBSDKGraphRequest(graphPath: "me/friends", parameters: ["fields": "name,picture.type(normal),gender"]).start(completionHandler: { (connection, user, requestError) -> Void in
+            if requestError != nil {
+                print(requestError)
+                return
+            }
+            
+            var friends = [Friend]()
+            for friendDictionary in user?["data"] as! [NSDictionary] {
+                let id = friendDictionary["id"] as? String
+                let name = friendDictionary["name"] as? String
+                if let picture = friendDictionary["picture"]?["data"]?!["url"] as? String {
+                    let friend = Friend(id: id, name: name, picture: picture)
+                    friends.append(friend)
+                }
+            }
+            print(friends)
+            
+        })
+        
     }
     
     func dumpProfile()
@@ -77,6 +110,7 @@ class SecondViewController: UIViewController, FBSDKLoginButtonDelegate {
     }
     
     func loginButtonWillLogin(_ loginButton: FBSDKLoginButton!) -> Bool {
+        loginButton.readPermissions = ["email", "public_profile", "user_friends"]
         return true
     }
     

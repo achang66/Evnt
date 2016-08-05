@@ -11,9 +11,9 @@ import MapKit
 
 class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
+    @IBOutlet weak var upperView: UIVisualEffectView!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var currentLocationButton: UIButton!
-    
     let locationManager = CLLocationManager()
     
     override func viewDidLoad()
@@ -30,6 +30,9 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         mapView.addGestureRecognizer(lpg)
         mapView.showsUserLocation = true
         mapView.delegate = self
+        
+        upperView.isHidden = true
+        
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -48,10 +51,9 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         // If there’s no reusable annotation view available, initialize a new one.
         if annotationView == nil {
             annotationView = CustomAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
-            annotationView!.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+            annotationView!.frame = CGRect(x: -21, y: -21, width: 42, height: 42)
             
             // Set the annotation view’s background color to a value determined by its longitude.
-            let hue = CGFloat(annotation.coordinate.longitude) / 10
             annotationView!.backgroundColor = UIColor.blue() //UIColor(hue: hue, saturation: 0.5, brightness: 1, alpha: 1)
         }
         
@@ -59,15 +61,9 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         
     }
     
-    
     func longPressAction(_ lpg: UILongPressGestureRecognizer) {
     
         if lpg.state == .began {
-            
-            //present Event View
-            let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc: UINavigationController = storyboard.instantiateViewController(withIdentifier: "EventViewController") as! UINavigationController
-            self.present(vc, animated:true, completion:nil)
             
             let CGPoint = lpg.location(in: mapView)
             let mapPoint = mapView.convert(CGPoint, toCoordinateFrom: mapView)
@@ -91,7 +87,7 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     {
         let location = locations.last
         let center =  CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
         self.mapView.setRegion(region, animated: true)
         self.locationManager.stopUpdatingLocation()
     }

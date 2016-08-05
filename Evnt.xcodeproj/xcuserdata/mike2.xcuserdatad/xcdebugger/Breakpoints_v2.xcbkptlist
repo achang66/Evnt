@@ -25,13 +25,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Evnt/FirstViewController.swift"
-            timestampString = "492035382.355802"
+            filePath = "UpperView.swift"
+            timestampString = "492054878.635782"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
-            landmarkName = "longPressAction(_:)"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "commonInitialization()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
